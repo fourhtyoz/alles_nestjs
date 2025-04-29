@@ -41,17 +41,17 @@ export class UsersService {
     }
 
     async findAll(): Promise<User[]> {
-        return (await this.usersRepository.find()).sort((a, b) => a.id - b.id);
+        return await this.usersRepository.find({ order: { id: 'ASC' } });
     }
 
-    async findOneByUsername(username: string): Promise<User | null> {
+    async findByUsername(username: string): Promise<User | null> {
         return this.usersRepository.findOne({
             where: { username },
             select: ['id', 'username', 'email', 'password'],
         });
     }
 
-    async findOneById(id: number): Promise<User | null> {
+    async findById(id: number): Promise<User | null> {
         return this.usersRepository.findOne({ where: { id } });
     }
 }

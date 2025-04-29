@@ -15,7 +15,7 @@ export class AuthService {
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.usersService.findOneByUsername(username);
+        const user = await this.usersService.findByUsername(username);
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
@@ -71,7 +71,7 @@ export class AuthService {
                 secret: this.configService.get('JWT_REFRESH_SECRET'),
             });
 
-            const user = await this.usersService.findOneById(payload.sub);
+            const user = await this.usersService.findById(payload.sub);
             if (!user) {
                 throw new UnauthorizedException('User not found');
             }

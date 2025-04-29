@@ -9,12 +9,15 @@ import {
     NotFoundException,
     Delete,
     HttpCode,
+    UseInterceptors,
+    ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
 @Controller('articles')
+@UseInterceptors(ClassSerializerInterceptor)
 export class ArticlesController {
     constructor(private readonly articlesServices: ArticlesService) {}
 

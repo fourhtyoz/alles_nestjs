@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './articles.entity';
+import { User } from 'src/users/users.entity';
 import { Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -8,14 +9,18 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 @Injectable()
 export class ArticlesService {
     constructor(
+        @InjectRepository(User)
+        private readonly usersRepository: Repository<User>,
+
         @InjectRepository(Article)
-        private articlesRepository: Repository<Article>,
+        private readonly articlesRepository: Repository<Article>,
     ) {}
 
     async findAll(): Promise<Article[]> {
-        const articles = (await this.articlesRepository.find()).sort(
-            (a, b) => a.id - b.id,
-        );
+        const articles = await this.articlesRepository.find({
+            relations: ['author'],
+            order: { id: 'ASC' },
+        });
         return articles;
     }
 
@@ -27,10 +32,20 @@ export class ArticlesService {
     }
 
     async create(createArticleDto: CreateArticleDto): Promise<Article> {
-        const article = this.articlesRepository.create(createArticleDto);
-        return this.articlesRepository.save(article);
+        const author = await this.usersRepository.findOne({
+            where: { id: createArticleDto.authorId },
+        });
+        if (!author) {
+            throw new NotFoundException('Author not found');
+        }
+        const article = await this.articlesRepository.save({
+            ...createArticleDto,
+            author,
+        });
+        return this.articlesRepository.create(article);
     }
 
+    // TODO: cannot change author
     async update(
         id: number,
         updateArticleDto: UpdateArticleDto,
