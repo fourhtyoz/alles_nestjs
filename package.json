@@ -26,7 +26,7 @@
     "migration:revert": "npm run typeorm -- migration:revert -d ./typeorm.config.ts"
   },
   "lint-staged": {
-    "src/**/*.ts": ["prettier --write", "git add"]
+    "src/**/*.ts": ["prettier --write"]
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
