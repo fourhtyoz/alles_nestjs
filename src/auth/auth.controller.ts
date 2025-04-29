@@ -8,7 +8,7 @@ export class AuthController {
 
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
-        const { access_token, user } = await this.authService.login(loginDto);
-        return { access_token, user };
+        const res = await this.authService.login(loginDto);
+        return res;
     }
 }

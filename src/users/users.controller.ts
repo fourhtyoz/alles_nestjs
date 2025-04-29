@@ -1,9 +1,8 @@
-import { Controller, Body, Param, Get, Post, Put, Delete, UseGuards, NotFoundException, UseInterceptors, ClassSerializerInterceptor, HttpCode, ParseIntPipe } from "@nestjs/common";
+import { Controller, Body, Param, Get, Post, Put, Delete, UseGuards, NotFoundException, UseInterceptors, ClassSerializerInterceptor, HttpCode, ParseIntPipe, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { AuthGuard } from "@nestjs/passport";
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)

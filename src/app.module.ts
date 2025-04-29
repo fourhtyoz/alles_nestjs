@@ -8,10 +8,11 @@ import { UsersController } from './users/users.controller';
 import { RootController } from './app.controller';
 import { AuthController } from './auth/auth.controller';
 import { AppDataSource } from 'typeorm.config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(AppDataSource.options),
     UsersModule,
     PostsModule,
