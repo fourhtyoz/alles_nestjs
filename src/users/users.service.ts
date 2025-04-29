@@ -1,28 +1,36 @@
-import { Injectable, ConflictException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { User } from "./users.entity";
-import { Repository } from "typeorm";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { Injectable, ConflictException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './users.entity';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
-export class UsersService{
-    constructor(@InjectRepository(User) private usersRepository: Repository<User>) {}
+export class UsersService {
+    constructor(
+        @InjectRepository(User) private usersRepository: Repository<User>,
+    ) {}
 
     async create(createUserDto: CreateUserDto): Promise<User> {
         const exists = await this.usersRepository.findOne({
-            where: [{ username: createUserDto.username }, { email: createUserDto.email }]
-        })
+            where: [
+                { username: createUserDto.username },
+                { email: createUserDto.email },
+            ],
+        });
         if (exists) {
             throw new ConflictException('Invalid data');
         }
 
-        const user = this.usersRepository.create(createUserDto)
-        return this.usersRepository.save(user)
+        const user = this.usersRepository.create(createUserDto);
+        return this.usersRepository.save(user);
     }
 
-    async update(id: number, updateUserDto: UpdateUserDto): Promise<User | null> {
-        const exists = await this.usersRepository.findOne({ where: [{ id }] })
+    async update(
+        id: number,
+        updateUserDto: UpdateUserDto,
+    ): Promise<User | null> {
+        const exists = await this.usersRepository.findOne({ where: [{ id }] });
         if (!exists) {
             throw new ConflictException('Invalid data');
         }
@@ -40,13 +48,13 @@ export class UsersService{
     }
 
     async findOneByUsername(username: string): Promise<User | null> {
-        return this.usersRepository.findOne({ 
+        return this.usersRepository.findOne({
             where: { username },
-            select: ['id', 'username', 'email', 'password']
-        })
+            select: ['id', 'username', 'email', 'password'],
+        });
     }
 
     async findOneById(id: number): Promise<User | null> {
-        return this.usersRepository.findOne({ where: { id } })
+        return this.usersRepository.findOne({ where: { id } });
     }
 }

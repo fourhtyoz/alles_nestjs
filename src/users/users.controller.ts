@@ -1,8 +1,23 @@
-import { Controller, Body, Param, Get, Post, Put, Delete, UseGuards, NotFoundException, UseInterceptors, ClassSerializerInterceptor, HttpCode, ParseIntPipe, UnauthorizedException } from "@nestjs/common";
-import { UsersService } from "./users.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import {
+    Controller,
+    Body,
+    Param,
+    Get,
+    Post,
+    Put,
+    Delete,
+    UseGuards,
+    NotFoundException,
+    UseInterceptors,
+    ClassSerializerInterceptor,
+    HttpCode,
+    ParseIntPipe,
+    UnauthorizedException,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -11,11 +26,11 @@ export class UsersController {
 
     @Post()
     async create(@Body() createUserDto: CreateUserDto) {
-        const newUser = await this.userService.create(createUserDto)
-        return { 
+        const newUser = await this.userService.create(createUserDto);
+        return {
             id: newUser.id,
-            username: newUser.username, 
-            email: newUser.email 
+            username: newUser.username,
+            email: newUser.email,
         };
     }
 
@@ -31,14 +46,17 @@ export class UsersController {
     async findOne(@Param('id', ParseIntPipe) id: number) {
         const user = await this.userService.findOneById(+id);
         if (!user) {
-            throw new NotFoundException('User not found')
+            throw new NotFoundException('User not found');
         }
-        return user
+        return user;
     }
 
     @UseGuards(JwtAuthGuard)
     @Put(':id')
-    async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
+    async update(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto,
+    ) {
         return this.userService.update(+id, updateUserDto);
     }
 
@@ -48,5 +66,4 @@ export class UsersController {
     async remove(@Param('id', ParseIntPipe) id: number) {
         return this.userService.delete(+id);
     }
-
 }

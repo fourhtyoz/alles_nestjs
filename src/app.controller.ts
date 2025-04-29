@@ -1,10 +1,9 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common';
 
 @Controller()
-export class RootController{
-
+export class RootController {
     @Get()
     home(): string {
-        return 'meow'
+        return 'meow';
     }
 }
