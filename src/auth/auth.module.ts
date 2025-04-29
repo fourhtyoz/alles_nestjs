@@ -11,9 +11,13 @@ import { AuthController } from './auth.controller';
     imports: [
         UsersModule,
         PassportModule,
-        JwtModule.register({
-            secret: process.env.JWT_SECRET || 'meow',
-            signOptions: { expiresIn: '60m' }
+        JwtModule.registerAsync({
+            useFactory: () => ({
+                secret: process.env.JWT_SECRET,
+                signOptions: { 
+                    expiresIn: '15m' // 15 minutes
+                }
+            })
         })
     ],
     controllers: [AuthController],
