@@ -10,6 +10,7 @@ import {
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Article } from 'src/articles/articles.entity';
+import { Comment } from 'src/comments/comments.entity';
 
 @Entity()
 export class User {
@@ -31,6 +32,9 @@ export class User {
 
     @OneToMany(() => Article, (article) => article.author)
     articles: Article[];
+
+    @OneToMany(() => Comment, (comment) => comment.author)
+    comments: Comment[];
 
     @CreateDateColumn()
     createdAt: Date;

@@ -3,10 +3,12 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
+    OneToMany,
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { User } from 'src/users/users.entity';
+import { Comment } from 'src/comments/comments.entity';
 
 enum ArticleStatus {
     DRAFT = 'draft',
@@ -42,6 +44,9 @@ export class Article {
         onDelete: 'CASCADE',
     })
     author: User;
+
+    @OneToMany(() => Comment, (comment) => comment.article)
+    comments: Comment[];
 
     @Column({
         type: 'enum',

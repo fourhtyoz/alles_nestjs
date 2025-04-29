@@ -5,9 +5,11 @@ import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersController } from './users/users.controller';
-import { RootController } from './app.controller';
 import { AuthController } from './auth/auth.controller';
 import { AppDataSource } from 'typeorm.config';
+import { CommentsModule } from './comments/comments.module';
+import { ArticlesController } from './articles/articles.controller';
+import { CommentsController } from './comments/comments.controller';
 
 @Module({
     imports: [
@@ -16,8 +18,14 @@ import { AppDataSource } from 'typeorm.config';
         AuthModule,
         UsersModule,
         ArticlesModule,
+        CommentsModule,
     ],
-    controllers: [RootController, UsersController, AuthController],
+    controllers: [
+        AuthController,
+        UsersController,
+        ArticlesController,
+        CommentsController,
+    ],
     providers: [],
 })
 export class AppModule {}
