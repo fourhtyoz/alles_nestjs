@@ -23,24 +23,14 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    @Post()
-    async create(@Body() createUserDto: CreateUserDto) {
-        const newUser = await this.userService.create(createUserDto);
-        return {
-            id: newUser.id,
-            username: newUser.username,
-            email: newUser.email,
-        };
-    }
-
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get()
     async findAll() {
         const users = await this.userService.findAll();
         return users;
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
         const user = await this.userService.findOneById(id);
@@ -50,8 +40,18 @@ export class UsersController {
         return user;
     }
 
-    @UseGuards(JwtAuthGuard)
-    @Put(':id')
+    @Post('create')
+    async create(@Body() createUserDto: CreateUserDto) {
+        const newUser = await this.userService.create(createUserDto);
+        return {
+            id: newUser.id,
+            username: newUser.username,
+            email: newUser.email,
+        };
+    }
+
+    // @UseGuards(JwtAuthGuard)
+    @Put(':id/update')
     async update(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto,
@@ -59,9 +59,9 @@ export class UsersController {
         return this.userService.update(id, updateUserDto);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @HttpCode(204)
-    @Delete(':id')
+    @Delete(':id/delete')
     async delete(@Param('id', ParseIntPipe) id: number) {
         return this.userService.delete(id);
     }
