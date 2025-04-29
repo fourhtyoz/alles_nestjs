@@ -6,8 +6,8 @@ import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersController } from './users/users.controller';
 import { RootController } from './app.controller';
+import { AuthController } from './auth/auth.controller';
 import { AppDataSource } from 'typeorm.config';
-import * as path from 'path';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import * as path from 'path';
     PostsModule,
     AuthModule
   ],
-  controllers: [RootController, UsersController],
+  controllers: [RootController, UsersController, AuthController],
   providers: [],
 })
 export class AppModule {}
