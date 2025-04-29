@@ -13,8 +13,8 @@ export class AuthService {
         private jwtService: JwtService,
         private configService: ConfigService,
     ) {}
-
     async validateUser(username: string, pass: string): Promise<any> {
+        console.log(123);
         const user = await this.usersService.findOneByUsername(username);
         if (!user) {
             throw new UnauthorizedException('User not found');
