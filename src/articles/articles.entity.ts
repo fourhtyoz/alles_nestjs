@@ -1,0 +1,52 @@
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
+import { User } from 'src/users/users.entity';
+
+enum ArticleStatus {
+    DRAFT = 'draft',
+    PUBLISHED = 'published',
+    ARCHIVED = 'archived',
+}
+
+@Entity()
+export class Article {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+    @Column({
+        length: 255,
+        nullable: false,
+        comment: 'Article title with max 200 chars',
+    })
+    title: string;
+
+    @Column('text')
+    text: string;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @Column({ default: true })
+    isActive: boolean;
+
+    @ManyToOne(() => User, (user) => user.articles, {
+        onDelete: 'CASCADE',
+    })
+    author: User;
+
+    @Column({
+        type: 'enum',
+        enum: ArticleStatus,
+        default: ArticleStatus.DRAFT,
+    })
+    status: ArticleStatus;
+}

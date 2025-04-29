@@ -26,17 +26,14 @@ export class UsersService {
         return this.usersRepository.save(user);
     }
 
-    async update(
-        id: number,
-        updateUserDto: UpdateUserDto,
-    ): Promise<User | null> {
-        const exists = await this.usersRepository.findOne({ where: [{ id }] });
+    async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+        const exists = await this.usersRepository.findOne({ where: { id } });
         if (!exists) {
             throw new ConflictException('Invalid data');
         }
 
         await this.usersRepository.update(id, updateUserDto);
-        return this.usersRepository.findOne({ where: { id } });
+        return this.usersRepository.findOneOrFail({ where: { id } });
     }
 
     async delete(id: number): Promise<void> {

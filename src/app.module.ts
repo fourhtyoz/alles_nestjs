@@ -13,9 +13,9 @@ import { AppDataSource } from 'typeorm.config';
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot(AppDataSource.options),
+        AuthModule,
         UsersModule,
         ArticlesModule,
-        AuthModule,
     ],
     controllers: [RootController, UsersController, AuthController],
     providers: [],

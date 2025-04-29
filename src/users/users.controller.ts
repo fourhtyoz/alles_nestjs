@@ -12,7 +12,6 @@ import {
     ClassSerializerInterceptor,
     HttpCode,
     ParseIntPipe,
-    UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -44,7 +43,7 @@ export class UsersController {
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        const user = await this.userService.findOneById(+id);
+        const user = await this.userService.findOneById(id);
         if (!user) {
             throw new NotFoundException('User not found');
         }
@@ -57,13 +56,13 @@ export class UsersController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto,
     ) {
-        return this.userService.update(+id, updateUserDto);
+        return this.userService.update(id, updateUserDto);
     }
 
     @UseGuards(JwtAuthGuard)
     @HttpCode(204)
     @Delete(':id')
-    async remove(@Param('id', ParseIntPipe) id: number) {
-        return this.userService.delete(+id);
+    async delete(@Param('id', ParseIntPipe) id: number) {
+        return this.userService.delete(id);
     }
 }
