@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+    Injectable,
+    ConflictException,
+    NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository } from 'typeorm';
@@ -22,18 +26,20 @@ export class UsersService {
             throw new ConflictException('Invalid data');
         }
 
-        const user = this.usersRepository.create(createUserDto);
-        return this.usersRepository.save(user);
+        const user = this.usersRepository.save(createUserDto);
+        return user;
     }
 
     async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-        const exists = await this.usersRepository.findOne({ where: { id } });
-        if (!exists) {
+        const user = await this.usersRepository.preload({
+            id,
+            ...updateUserDto,
+        });
+        if (!user) {
             throw new ConflictException('Invalid data');
         }
 
-        await this.usersRepository.update(id, updateUserDto);
-        return this.usersRepository.findOneOrFail({ where: { id } });
+        return await this.usersRepository.save(user);
     }
 
     async delete(id: number): Promise<void> {
@@ -52,6 +58,10 @@ export class UsersService {
     }
 
     async findById(id: number): Promise<User | null> {
-        return this.usersRepository.findOne({ where: { id } });
+        const user = this.usersRepository.findOne({ where: { id } });
+        if (!user) {
+            throw new NotFoundException('Article not found');
+        }
+        return user;
     }
 }

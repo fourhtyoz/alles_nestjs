@@ -17,12 +17,16 @@ export class ChatService {
     ) {}
 
     async saveMessage(data: { roomId: number; userId: number; text: string }) {
-        const room = await this.roomRepository.findOneBy({ id: data.roomId });
+        const room = await this.roomRepository.findOne({
+            where: { id: data.roomId },
+        });
         if (!room) {
             throw new NotFoundException('Room not found');
         }
 
-        const user = await this.userRepository.findOneBy({ id: data.userId });
+        const user = await this.userRepository.findOne({
+            where: { id: data.userId },
+        });
         if (!user) {
             throw new NotFoundException('User not found');
         }

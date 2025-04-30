@@ -7,7 +7,6 @@ import {
     Put,
     Delete,
     UseGuards,
-    NotFoundException,
     UseInterceptors,
     ClassSerializerInterceptor,
     HttpCode,
@@ -26,28 +25,18 @@ export class UsersController {
     // @UseGuards(JwtAuthGuard)
     @Get()
     async findAll() {
-        const users = await this.userService.findAll();
-        return users;
+        return await this.userService.findAll();
     }
 
     // @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        const user = await this.userService.findById(id);
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-        return user;
+        return await this.userService.findById(id);
     }
 
     @Post('create')
     async create(@Body() createUserDto: CreateUserDto) {
-        const newUser = await this.userService.create(createUserDto);
-        return {
-            id: newUser.id,
-            username: newUser.username,
-            email: newUser.email,
-        };
+        return await this.userService.create(createUserDto);
     }
 
     // @UseGuards(JwtAuthGuard)
