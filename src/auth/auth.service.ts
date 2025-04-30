@@ -31,7 +31,7 @@ export class AuthService {
 
     async login(
         loginDto: LoginDto,
-    ): Promise<{ access_token: string; refresh_token: string; user: any }> {
+    ): Promise<{ accessToken: string; refreshToken: string; user: any }> {
         const user = await this.validateUser(
             loginDto.username,
             loginDto.password,
@@ -41,8 +41,8 @@ export class AuthService {
             sub: user.id,
         };
         return {
-            access_token: this.generateAccessToken(payload),
-            refresh_token: this.generateRefreshToken(payload),
+            accessToken: this.generateAccessToken(payload),
+            refreshToken: this.generateRefreshToken(payload),
             user: {
                 id: user.id,
                 username: user.username,
