@@ -11,6 +11,7 @@ import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Article } from 'src/articles/articles.entity';
 import { Comment } from 'src/comments/comments.entity';
+import { Message } from 'src/chat/entities/message.entity';
 
 @Entity()
 export class User {
@@ -35,6 +36,9 @@ export class User {
 
     @OneToMany(() => Comment, (comment) => comment.author)
     comments: Comment[];
+
+    @OneToMany(() => Message, (message) => message.author, { nullable: true })
+    messages: Message[];
 
     @CreateDateColumn()
     createdAt: Date;

@@ -10,11 +10,13 @@ import { AppDataSource } from 'typeorm.config';
 import { CommentsModule } from './comments/comments.module';
 import { ArticlesController } from './articles/articles.controller';
 import { CommentsController } from './comments/comments.controller';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot(AppDataSource.options),
+        ChatModule,
         AuthModule,
         UsersModule,
         ArticlesModule,
