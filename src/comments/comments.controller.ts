@@ -6,7 +6,6 @@ import {
     ParseIntPipe,
     Post,
     Put,
-    NotFoundException,
     Delete,
     HttpCode,
 } from '@nestjs/common';
@@ -18,10 +17,15 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
 
+    // TODO: for admins only
+    @Get()
+    async findAll() {
+        return await this.commentsService.findAll();
+    }
+
     @Post('create')
     async createArticle(@Body() createArticleDto: CreateCommentDto) {
-        const newComment = await this.commentsService.create(createArticleDto);
-        return newComment;
+        return await this.commentsService.create(createArticleDto);
     }
 
     @Put(':id/update')
@@ -29,12 +33,12 @@ export class CommentsController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateArticleDto: UpdateCommentDto,
     ) {
-        return this.commentsService.update(id, updateArticleDto);
+        return await this.commentsService.update(id, updateArticleDto);
     }
 
     @HttpCode(204)
     @Delete(':id/delete')
     async deleteArticle(@Param('id', ParseIntPipe) id: number) {
-        return this.commentsService.delete(id);
+        return await this.commentsService.delete(id);
     }
 }

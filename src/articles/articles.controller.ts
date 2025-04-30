@@ -6,7 +6,6 @@ import {
     ParseIntPipe,
     Post,
     Put,
-    NotFoundException,
     Delete,
     HttpCode,
     UseInterceptors,
@@ -23,23 +22,17 @@ export class ArticlesController {
 
     @Get()
     async findAll() {
-        const articles = await this.articlesServices.findAll();
-        return articles;
+        return await this.articlesServices.findAll();
     }
 
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
-        const article = this.articlesServices.findById(id);
-        if (!article) {
-            throw new NotFoundException('Article not found');
-        }
-        return article;
+        return await this.articlesServices.findById(id);
     }
 
     @Post('create')
     async createArticle(@Body() createArticleDto: CreateArticleDto) {
-        const newArticle = await this.articlesServices.create(createArticleDto);
-        return newArticle;
+        return await this.articlesServices.create(createArticleDto);
     }
 
     @Put(':id/update')
@@ -47,12 +40,12 @@ export class ArticlesController {
         @Param('id', ParseIntPipe) id: number,
         @Body() updateArticleDto: UpdateArticleDto,
     ) {
-        return this.articlesServices.update(id, updateArticleDto);
+        return await this.articlesServices.update(id, updateArticleDto);
     }
 
     @HttpCode(204)
     @Delete(':id/delete')
     async deleteArticle(@Param('id', ParseIntPipe) id: number) {
-        return this.articlesServices.delete(id);
+        return await this.articlesServices.delete(id);
     }
 }

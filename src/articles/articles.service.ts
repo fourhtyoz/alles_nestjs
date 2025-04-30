@@ -28,6 +28,9 @@ export class ArticlesService {
         const article = await this.articlesRepository.findOne({
             where: { id },
         });
+        if (!article) {
+            throw new NotFoundException('Article not found');
+        }
         return article;
     }
 
@@ -42,20 +45,31 @@ export class ArticlesService {
             ...createArticleDto,
             author,
         });
-        return this.articlesRepository.create(article);
+        return article;
     }
 
-    // TODO: cannot change author
     async update(
         id: number,
         updateArticleDto: UpdateArticleDto,
     ): Promise<Article> {
-        const exists = await this.articlesRepository.findOne({ where: { id } });
-        if (!exists) {
+        const { authorId, ...rest } = updateArticleDto;
+        const article = await this.articlesRepository.preload({ id, ...rest });
+        if (!article) {
             throw new NotFoundException('Article not found');
         }
-        await this.articlesRepository.update(id, updateArticleDto);
-        return this.articlesRepository.findOneOrFail({ where: { id } });
+
+        // TODO: for admins only
+        if (authorId) {
+            const author = await this.usersRepository.findOne({
+                where: { id: authorId },
+            });
+            if (!author) {
+                throw new NotFoundException('User not found');
+            }
+            article.author = author;
+        }
+
+        return await this.articlesRepository.save(article);
     }
 
     async delete(id: number): Promise<void> {

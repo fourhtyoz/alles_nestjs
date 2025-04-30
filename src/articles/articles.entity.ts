@@ -51,7 +51,7 @@ export class Article {
     @Column({
         type: 'enum',
         enum: ArticleStatus,
-        default: ArticleStatus.DRAFT,
+        default: ArticleStatus.PUBLISHED,
     })
     status: ArticleStatus;
 }
