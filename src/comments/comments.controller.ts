@@ -20,6 +20,7 @@ export class CommentsController {
     constructor(private readonly commentsService: CommentsService) {}
 
     // TODO: for admins only
+    @UseGuards(JwtAuthGuard)
     @Get()
     async findAll() {
         return await this.commentsService.findAll();

@@ -11,4 +11,3 @@ import { ChatGateway } from './chat.gateway';
     providers: [ChatService, ChatGateway],
 })
 export class ChatModule {}
-console.log(123);
