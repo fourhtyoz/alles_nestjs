@@ -4,15 +4,9 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
-import * as fs from 'fs';
 
 async function bootstrap() {
-    const httpsOptions = {
-        key: fs.readFileSync(process.env.HTTPS_KEY || ''),
-        cert: fs.readFileSync(process.env.HTTPS_CERT || ''),
-    };
-
-    const app = await NestFactory.create(AppModule, { httpsOptions });
+    const app = await NestFactory.create(AppModule);
     app.setGlobalPrefix('api');
     app.enableCors({
         origin: process.env.FRONTEND_URL,
