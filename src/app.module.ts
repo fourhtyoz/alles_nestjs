@@ -12,11 +12,19 @@ import { ArticlesController } from './articles/articles.controller';
 import { CommentsController } from './comments/comments.controller';
 import { ChatModule } from './chat/chat.module';
 import { LoggerMiddleware } from './logger.middleware';
+import { CacheModule } from '@nestjs/cache-manager';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
     imports: [
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot(AppDataSource.options),
+        CacheModule.register({
+            isGlobal: true,
+            store: redisStore,
+            host: process.env.REDIS_HOST,
+            port: process.env.REDIS_PORT,
+        }),
         ChatModule,
         AuthModule,
         UsersModule,

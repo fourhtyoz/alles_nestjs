@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { TokenPayload } from './interfaces/token-payload.interface';
 import { ConfigService } from '@nestjs/config';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private configService: ConfigService,
-        // @Inject('REDIS_CLIENT') private readonly redis: RedisClientType,
+        @Inject(CACHE_MANAGER) private cacheManager: Cache,
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
@@ -60,19 +61,21 @@ export class AuthService {
             secret: this.configService.get('JWT_REFRESH_SECRET'),
         });
 
-        await this.redis.set(`refresh_token:${payload.sub}`, 1, {
-            EX: 7 * 24 * 60 * 60,
-        });
+        const ttl = 7 * 24 * 60 * 60; // 7 days
+        await this.cacheManager.set(`refresh_token:${payload.sub}`, '1', ttl);
         return refreshToken;
     }
 
     async validateRefreshToken(userId: number): Promise<boolean> {
-        const exists = await this.redis.exists(`refresh_token:${userId}`);
-        return exists === 1;
+        const value = await this.cacheManager.get(`refresh_token:${userId}`);
+        if (value === '1') {
+            return true;
+        }
+        return false;
     }
 
     async invalidateRefreshToken(userId: number): Promise<void> {
-        await this.redis.del(`refresh_token:${userId}`);
+        await this.cacheManager.del(`refresh_token:${userId}`);
     }
 
     async verifyRefreshToken(token: string): Promise<TokenPayload> {
