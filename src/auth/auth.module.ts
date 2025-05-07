@@ -6,9 +6,10 @@ import { UsersModule } from 'src/users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
+import { CacheModule } from 'src/cache/cache.module';
 
 @Module({
-    imports: [UsersModule, PassportModule, JwtModule.register({})],
+    imports: [UsersModule, CacheModule, PassportModule, JwtModule.register({})],
     controllers: [AuthController],
     providers: [AuthService, JwtAuthGuard, JwtStrategy],
     exports: [JwtAuthGuard, AuthService],

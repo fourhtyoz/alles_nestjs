@@ -1,10 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
 import { TokenPayload } from './interfaces/token-payload.interface';
 import { ConfigService } from '@nestjs/config';
-import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { CacheService } from 'src/cache/cache.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private configService: ConfigService,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache,
+        private cacheService: CacheService,
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
@@ -48,26 +48,26 @@ export class AuthService {
         };
     }
 
-    async generateAccessToken(payload: TokenPayload) {
+    async generateAccessToken(payload: TokenPayload): Promise<string> {
         return this.jwtService.sign(payload, {
             expiresIn: '15m',
             secret: this.configService.get('JWT_ACCESS_SECRET'),
         });
     }
 
-    async generateRefreshToken(payload: TokenPayload) {
+    async generateRefreshToken(payload: TokenPayload): Promise<string> {
         const refreshToken = this.jwtService.sign(payload, {
             expiresIn: '7d',
             secret: this.configService.get('JWT_REFRESH_SECRET'),
         });
 
         const ttl = 7 * 24 * 60 * 60; // 7 days
-        await this.cacheManager.set(`refresh_token:${payload.sub}`, '1', ttl);
+        await this.cacheService.set(`refresh_token:${payload.sub}`, '1', ttl);
         return refreshToken;
     }
 
     async validateRefreshToken(userId: number): Promise<boolean> {
-        const value = await this.cacheManager.get(`refresh_token:${userId}`);
+        const value = await this.cacheService.get(`refresh_token:${userId}`);
         if (value === '1') {
             return true;
         }
@@ -75,7 +75,7 @@ export class AuthService {
     }
 
     async invalidateRefreshToken(userId: number): Promise<void> {
-        await this.cacheManager.del(`refresh_token:${userId}`);
+        await this.cacheService.del(`refresh_token:${userId}`);
     }
 
     async verifyRefreshToken(token: string): Promise<TokenPayload> {
