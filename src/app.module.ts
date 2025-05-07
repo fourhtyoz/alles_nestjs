@@ -13,6 +13,8 @@ import { CommentsController } from './comments/comments.controller';
 import { ChatModule } from './chat/chat.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { CacheModule } from './cache/cache.module';
+import { EmailModule } from './email/email.module';
+import { ReportModule } from './report/report.module';
 
 @Module({
     imports: [
@@ -24,6 +26,8 @@ import { CacheModule } from './cache/cache.module';
         ArticlesModule,
         CommentsModule,
         CacheModule,
+        EmailModule,
+        ReportModule,
     ],
     controllers: [
         AuthController,

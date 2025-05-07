@@ -8,11 +8,16 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { EmailService } from 'src/email/email.service';
+import { ReportService } from 'src/report/report.service';
 
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectRepository(User) private usersRepository: Repository<User>,
+        @InjectRepository(User)
+        private usersRepository: Repository<User>,
+        private emailService: EmailService,
+        private reportService: ReportService,
     ) {}
 
     async create(createUserDto: CreateUserDto): Promise<User> {
@@ -63,5 +68,26 @@ export class UsersService {
             throw new NotFoundException('Article not found');
         }
         return user;
+    }
+
+    async sendUsersReport(email: string) {
+        try {
+            const users = await this.findAll();
+            const reportPath =
+                await this.reportService.generateUserReport(users);
+
+            await this.emailService.sendEmail(
+                email,
+                'Users Report',
+                'Please find attached the users report',
+                reportPath,
+                `users-report-${Date.now()}.xlsx`,
+            );
+
+            await this.reportService.deleteTempFile(reportPath);
+        } catch (err) {
+            console.error('Error generating, sending, deleting report', err);
+            throw err;
+        }
     }
 }
