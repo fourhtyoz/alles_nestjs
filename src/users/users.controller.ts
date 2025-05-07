@@ -11,24 +11,22 @@ import {
     ClassSerializerInterceptor,
     HttpCode,
     ParseIntPipe,
-    Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Request } from 'express';
+import { CurrentUser } from 'src/decortators/user.decortator';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    // TODO: lol why do I need to log in?
+    @UseGuards(JwtAuthGuard)
     @Get('report')
-    async getReport(@Req() req: Request) {
-        const email = 'test@gmail.com';
-        this.userService.sendUsersReport(email).catch((err) => {
+    async getReport(@CurrentUser() user: any) {
+        this.userService.sendUsersReport(user.email).catch((err) => {
             console.error('Failed to generate report:', err);
         });
         return {

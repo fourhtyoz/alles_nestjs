@@ -39,6 +39,7 @@ export class AuthService {
             loginDto.password,
         );
         const payload: TokenPayload = {
+            email: user.email,
             username: user.username,
             sub: user.id,
         };
