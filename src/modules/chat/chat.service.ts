@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
 import { Room } from './entities/room.entity';
-import { User } from 'src/users/users.entity';
+import { User } from 'src/modules/users/users.entity';
 
 @Injectable()
 export class ChatService {

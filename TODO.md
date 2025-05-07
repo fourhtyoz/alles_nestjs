@@ -1,6 +1,6 @@
 # TODO
 1. csrf tokens
-2. admin website
+2. admin website (react admin)
 4. search
 5. pagination
 6. filters

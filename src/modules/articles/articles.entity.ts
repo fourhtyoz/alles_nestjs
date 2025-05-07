@@ -7,8 +7,8 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { User } from 'src/users/users.entity';
-import { Comment } from 'src/comments/comments.entity';
+import { User } from 'src/modules/users/users.entity';
+import { Comment } from 'src/modules/comments/comments.entity';
 
 enum ArticleStatus {
     DRAFT = 'draft',

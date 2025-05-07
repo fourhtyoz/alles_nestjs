@@ -6,8 +6,8 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { User } from 'src/users/users.entity';
-import { Article } from 'src/articles/articles.entity';
+import { User } from 'src/modules/users/users.entity';
+import { Article } from 'src/modules/articles/articles.entity';
 
 @Entity()
 export class Comment {

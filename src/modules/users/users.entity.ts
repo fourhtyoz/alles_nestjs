@@ -9,9 +9,9 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
-import { Article } from 'src/articles/articles.entity';
-import { Comment } from 'src/comments/comments.entity';
-import { Message } from 'src/chat/entities/message.entity';
+import { Article } from 'src/modules/articles/articles.entity';
+import { Comment } from 'src/modules/comments/comments.entity';
+import { Message } from 'src/modules/chat/entities/message.entity';
 
 @Entity()
 export class User {

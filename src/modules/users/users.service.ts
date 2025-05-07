@@ -8,8 +8,8 @@ import { User } from './users.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { EmailService } from 'src/email/email.service';
-import { ReportService } from 'src/report/report.service';
+import { EmailService } from 'src/modules/email/email.service';
+import { ReportService } from 'src/modules/report/report.service';
 
 @Injectable()
 export class UsersService {
