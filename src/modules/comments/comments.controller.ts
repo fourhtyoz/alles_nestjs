@@ -13,7 +13,7 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import { JwtAuthGuard } from 'src/modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('comments')
 export class CommentsController {

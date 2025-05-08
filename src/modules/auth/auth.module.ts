@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { UsersModule } from 'src/modules/users/users.module';
