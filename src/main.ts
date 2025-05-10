@@ -18,16 +18,29 @@ async function bootstrap() {
         new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
     );
 
-    // TODO: add authorization
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Alles Nest.js documentation')
         .setDescription('API documentation')
         .setVersion('1.0')
-        // .addBearerAuth()
+        .addBearerAuth(
+            {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+                name: 'JWT',
+                description: 'Enter JWT Token',
+                in: 'header',
+            },
+            'JWT',
+        )
         .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup('docs', app, document);
+    SwaggerModule.setup('docs', app, document, {
+        swaggerOptions: {
+            persistAuthorization: true,
+        },
+    });
 
     await app.listen(process.env.PORT ?? 3000);
     console.log(`Application is running on: ${await app.getUrl()}`);

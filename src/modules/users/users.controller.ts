@@ -17,14 +17,21 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/decorators/user.decortator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
+    @Post('create')
+    async create(@Body() createUserDto: CreateUserDto) {
+        return await this.userService.create(createUserDto);
+    }
+
+    @ApiBearerAuth('JWT')
     @UseGuards(JwtAuthGuard)
-    @Get('report')
+    @Get('excel_report')
     async getReport(@CurrentUser() user: any) {
         this.userService.sendUsersReport(user.email).catch((err) => {
             console.error('Failed to generate report:', err);
@@ -36,23 +43,21 @@ export class UsersController {
         };
     }
 
+    @ApiBearerAuth('JWT')
     @UseGuards(JwtAuthGuard)
     @Get()
     async findAll() {
         return await this.userService.findAll();
     }
 
+    @ApiBearerAuth('JWT')
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     async findOne(@Param('id', ParseIntPipe) id: number) {
         return await this.userService.findById(id);
     }
 
-    @Post('create')
-    async create(@Body() createUserDto: CreateUserDto) {
-        return await this.userService.create(createUserDto);
-    }
-
+    @ApiBearerAuth('JWT')
     @UseGuards(JwtAuthGuard)
     @Put(':id/update')
     async update(
@@ -62,6 +67,7 @@ export class UsersController {
         return this.userService.update(id, updateUserDto);
     }
 
+    @ApiBearerAuth('JWT')
     @UseGuards(JwtAuthGuard)
     @HttpCode(204)
     @Delete(':id/delete')
