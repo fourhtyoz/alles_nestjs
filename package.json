@@ -23,7 +23,8 @@
     "migration:create": "npm run typeorm -- migration:create -p src/migrations/$(date +%s) -d ./typeorm.config.ts",
     "migration:generate": "npm run typeorm -- migration:generate -p src/migrations/migration -d ./typeorm.config.ts",
     "migration:run": "npm run typeorm -- migration:run -d ./typeorm.config.ts",
-    "migration:revert": "npm run typeorm -- migration:revert -d ./typeorm.config.ts"
+    "migration:revert": "npm run typeorm -- migration:revert -d ./typeorm.config.ts",
+    "command:set-admins": "ts-node src/scripts/set-admins.ts"
   },
   "lint-staged": {
     "src/**/*.ts": [
@@ -50,6 +51,7 @@
     "exceljs": "^4.4.0",
     "helmet": "^8.1.0",
     "ioredis": "^5.6.1",
+    "nest-commander": "^3.17.0",
     "nodemailer": "^7.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",

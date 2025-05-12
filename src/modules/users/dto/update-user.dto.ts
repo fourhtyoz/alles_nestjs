@@ -1,6 +1,7 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Role } from 'src/modules/auth/roles.enum';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
     @ApiPropertyOptional({
@@ -27,4 +28,10 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
         description: 'Whether the user is active (optional)',
     })
     isActive?: boolean;
+
+    @ApiPropertyOptional({
+        example: Role.Admin,
+        description: 'The role of the user',
+    })
+    role?: any;
 }

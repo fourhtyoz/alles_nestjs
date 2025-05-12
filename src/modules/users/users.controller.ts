@@ -18,6 +18,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CurrentUser } from 'src/decorators/user.decortator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from 'src/decorators/roles.decortator';
+import { Role } from '../auth/roles.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('users')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -44,10 +47,11 @@ export class UsersController {
     }
 
     @ApiBearerAuth('JWT')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles([Role.Admin])
     @Get()
     async findAll() {
-        return await this.userService.findAll();
+        return this.userService.findAll();
     }
 
     @ApiBearerAuth('JWT')

@@ -12,6 +12,7 @@ import * as bcrypt from 'bcrypt';
 import { Article } from 'src/modules/articles/articles.entity';
 import { Comment } from 'src/modules/comments/comments.entity';
 import { Message } from 'src/modules/chat/entities/message.entity';
+import { Role } from '../auth/roles.enum';
 
 @Entity()
 export class User {
@@ -45,6 +46,13 @@ export class User {
 
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @Column({
+        type: 'enum',
+        enum: Role,
+        default: Role.User,
+    })
+    role: Role;
 
     @BeforeInsert()
     async hashPassword() {
