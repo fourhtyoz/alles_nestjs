@@ -29,7 +29,7 @@ export class RolesGuard implements CanActivate {
             }
             return roles.some((role: Role) => roles.includes(role));
         } catch (e) {
-            console.log('RolesGuard error', e);
+            console.error('RolesGuard error', e);
             return false;
         }
     }
